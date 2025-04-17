@@ -1,0 +1,52 @@
+
+
+/* make the two halves sit side by side */
+main {
+  display: flex;
+  margin: 0;
+  margin-left: 4%;
+  margin-right: 4%;
+  padding: 0;
+  height: 100vh; /* full viewport height */
+  overflow: hidden;
+}
+
+/* left side: p5 canvas will be injected here */
+#canvas-container {
+  cursor: pointer;
+  flex: 1;             /* half of the width */
+  display: flex;       /* so canvas can center if needed */
+  display: flex;       /* so canvas can center if needed */
+  align-items: center; /* vertically center the canvas */
+  justify-content: flex-start; /* keep it left‑aligned horizontally */
+  position: relative; /* for p5 to place buttons relative to this */
+}
+
+/* right side: holds the SVG */
+#image-container {
+  flex: 1;                /* the other half */
+  overflow: hidden;
+  background-color: rgb(255, 255, 255);
+}
+#image-container img {
+  width: 100%;
+  height: 145%;
+  object-fit: contain;    /* preserve aspect ratio */
+  display: block;
+}
+/* targets any button inside #canvas-container */
+#canvas-container button {
+  background-color: blue;
+  color: white;
+  font-family: Arial, sans‑serif;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Optional: add a hover effect */
+#canvas-container button:hover {
+  background-color: darkblue;
+}
