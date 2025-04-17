@@ -36,8 +36,8 @@ main {
 }
 /* targets any button inside #canvas-container */
 #canvas-container button {
-  background-color: blue;
-  color: white;
+  background-color: rgb(255, 255, 255);
+  color: blue;
   font-family: Arial, sans‑serif;
   border: none;
   padding: 4px 8px;
@@ -49,4 +49,26 @@ main {
 /* Optional: add a hover effect */
 #canvas-container button:hover {
   background-color: darkblue;
+}
+
+
+.blue-slider {
+  accent-color: rgb(255, 255, 255);
+}
+.blue-slider::-webkit-slider-runnable-track { background: #ffffff; }
+.blue-slider::-webkit-slider-thumb {
+  background: rgb(255, 255, 255);
+  border: none;
+}
+
+
+.navigation {
+  height:5%;
+  width: 90%;
+  background-color: blue;
+  position: fixed;
+  top:0;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+
 }

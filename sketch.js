@@ -3,6 +3,7 @@ let shapes = [];
 let secondLayerActive = false;
 let secondLayerOrientation = 0; 
 let toggleButton, cycleButton;
+let sizeSlider;
 
 function setup() {
   // compute square side = min(left-half width, full height)
@@ -17,15 +18,7 @@ function setup() {
   ellipseMode(CORNER);
   frameRate(3);
 
-  // init 2×2 grid
-  for (let y = 0; y < gridSize; y++) {
-    shapes[y] = [];
-    for (let x = 0; x < gridSize; x++) {
-      shapes[y][x] = floor(random(3));
-    }
-  }
-
-  // add control buttons (they'll be appended to canvas-container)
+  // create UI controls
   toggleButton = createButton('Toggle Overlay');
   toggleButton.parent('canvas-container');
   toggleButton.position(10, 10);
@@ -35,17 +28,37 @@ function setup() {
 
   cycleButton = createButton('Switch');
   cycleButton.parent('canvas-container');
-  cycleButton.position(150, 10);
+  cycleButton.position(120, 10);
   cycleButton.mousePressed(() => {
     secondLayerOrientation = (secondLayerOrientation + 1) % 4;
   });
+
+  sizeSlider = createSlider(2, 12, gridSize, 1);
+  sizeSlider.parent('canvas-container');
+  sizeSlider.position(240, 12);
+  
+  // make the slider’s “accent” (fill and thumb) blue:
+  sizeSlider.style('accent-color', 'rgb(255, 255, 255)');
+  
+  // if you want the track behind the fill to be white:
+  sizeSlider.style('background', 'rgb(255, 255, 255)');
+  
+  sizeSlider.input(onSliderChange);
+  
+
+  // initial grid
+  initShapes();
 }
 
 function draw() {
   background(255);
 
-  // draw 2×2 blue shapes
+  
+
+  // cell size
   let d = width / gridSize;
+
+  // draw blue shapes
   noStroke();
   fill(0, 0, 255);
   for (let y = 0; y < gridSize; y++) {
@@ -58,18 +71,17 @@ function draw() {
     }
   }
 
-  // draw inset‐stroke triangle overlay if active
+  // optional inset-stroke overlay
   if (secondLayerActive) {
     stroke(0, 0, 255);
     noFill();
     let sw = 30;
     strokeWeight(sw);
 
-    // define the 4 corners of this square
-    let TL = { x: 0,    y: 0    };
-    let TR = { x: width, y: 0    };
-    let BR = { x: width, y: height };
-    let BL = { x: 0,    y: height };
+    let TL = { x: 0,       y: 0       };
+    let TR = { x: width,   y: 0       };
+    let BR = { x: width,   y: height  };
+    let BL = { x: 0,       y: height  };
 
     switch (secondLayerOrientation) {
       case 0: drawInsetTriangle(TL, BR, BL, sw); break;
@@ -78,8 +90,6 @@ function draw() {
       case 3: drawInsetTriangle(TL, TR, BL, sw); break;
     }
   }
-
- 
 }
 
 function mousePressed() {
@@ -92,11 +102,27 @@ function mousePressed() {
 }
 
 function windowResized() {
-  // keep left canvas square as window changes
-  const w = windowWidth / 2;
+  const w = windowWidth / 2.5;
   const h = windowHeight;
   const s = min(w, h);
   resizeCanvas(s, s);
+}
+
+// rebuilds the shapes grid when gridSize changes
+function initShapes() {
+  shapes = [];
+  for (let y = 0; y < gridSize; y++) {
+    shapes[y] = [];
+    for (let x = 0; x < gridSize; x++) {
+      shapes[y][x] = floor(random(3));
+    }
+  }
+}
+
+// called whenever the slider moves
+function onSliderChange() {
+  gridSize = sizeSlider.value();
+  initShapes();
 }
 
 // inset‐stroke triangle helper
@@ -110,5 +136,5 @@ function drawInsetTriangle(a, b, c, sw) {
     return { x: cx + (pt.x - cx)*r, y: cy + (pt.y - cy)*r };
   }
   let p1 = inset(a), p2 = inset(b), p3 = inset(c);
-  triangle(p1.x,p1.y, p2.x,p2.y, p3.x,p3.y);
+  triangle(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
 }
